@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MR_TOOLS এডমিন প্যানেল - গড মোড</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif;}
+body {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    min-height:100vh;
+    padding:20px;
+}
+
+/* হেডার স্টাইল */
+.header {
+    text-align:center;
+    margin-bottom:30px;
+    color:white;
+    position: relative;
+    padding: 20px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 20px;
+    border: 2px solid rgba(255,102,178,0.3);
+}
+
+.header h1 {
+    font-size:42px;
+    margin-bottom:10px;
+    background: linear-gradient(90deg, #ff66b2, #cc33ff, #66b2ff, #33ccff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header p {
+    color:#aaa;
+    font-size:18px;
+}
+
+/* স্ট্যাটাস বার */
+.status-bar {
+    display:flex;
+    justify-content:space-between;
+    background: rgba(0,0,0,0.8);
+    color:white;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:25px;
+    font-size:16px;
+    border: 1px solid rgba(255,102,178,0.3);
+}
+
+.status-item {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding: 8px 15px;
+    background: rgba(255,102,178,0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.status-item:hover {
+    background: rgba(255,102,178,0.2);
+    transform: translateY(-2px);
+}
+
+/* ইউজার গ্রিড */
+.users-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+    gap:20px;
+    margin-bottom:40px;
+}
+
+.user-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.user-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,102,178,0.1), rgba(204,51,255,0.1));
+    border-radius: 20px;
+    z-index: -1;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow:0 15px 35px rgba(255,102,178,0.3);
+    border-color: rgba(255,102,178,0.5);
+}
+
+.user-id {
+    font-size:20px;
+    font-weight:bold;
+    color:#333;
+    margin-bottom:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.user-id span {
+    background:linear-gradient(135deg, #667eea, #764ba2);
+    padding:6px 15px;
+    border-radius:10px;
+    color:white;
+    font-size:16px;
+}
+
+.controls-btn {
+    background:#ff66b2;
+    color:white;
+    border:none;
+    border-radius:8px;
+    padding:8px 16px;
+    cursor:pointer;
+    font-weight:600;
+    transition:all 0.3s ease;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+}
+
+.controls-btn:hover {
+    background:#cc33ff;
+    transform: translateY(-2px);
+}
+
+.user-stats {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
+
+.stat {
+    background:rgba(255,255,255,0.7);
+    padding:12px;
+    border-radius:10px;
+    text-align:center;
+    font-size:14px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,102,178,0.2);
+}
+
+.stat:hover {
+    transform: translateY(-3px);
+}
+
+.stat-value {
+    font-weight:bold;
+    color:#ff66b2;
+    font-size:18px;
+    margin-top:5px;
+}
+
+.user-status {
+    margin-top:12px;
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+    font-weight:bold;
+    font-size:14px;
+    transition: all 0.3s ease;
+}
+
+.status-active {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    color: #2e7d32;
+    border: 2px solid #4caf50;
+}
+
+.status-blocked {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    color: #c62828;
+    border: 2px solid #f44336;
+}
+
+.status-vip {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    color: #ef6c00;
+    border: 2px solid #ff9800;
+}
+
+.status-time-blocked {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    color: #ff9800;
+    border: 2px solid #ffb300;
+}
+
+/* কন্ট্রোল রুম */
+.control-room {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.95);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+    padding:20px;
+}
+
+.control-content {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+    border-radius:25px;
+    width:100%;
+    max-width:1000px;
+    max-height:95vh;
+    overflow-y:auto;
+    box-shadow:0 20px 50px rgba(255,102,178,0.5);
+    position:relative;
+    border: 2px solid rgba(255,102,178,0.5);
+}
+
+.control-header {
+    background:linear-gradient(135deg, #667eea, #764ba2);
+    color:white;
+    padding:20px;
+    border-radius:25px 25px 0 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.control-header h2 {
+    font-size:24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-btn {
+    background:rgba(255,255,255,0.2);
+    color:white;
+    border:none;
+    border-radius:50%;
+    width:40px;
+    height:40px;
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:0.3s;
+}
+
+.close-btn:hover {
+    background:rgba(255,255,255,0.3);
+    transform: rotate(90deg);
+}
+
+.control-body {
+    padding:25px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.control-section {
+    margin-bottom:20px;
+    padding:20px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.7);
+    border:1px solid rgba(255,102,178,0.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.control-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(255,102,178,0.2);
+}
+
+.control-section h3 {
+    color:#333;
+    margin-bottom:15px;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-bottom: 2px solid rgba(255,102,178,0.3);
+    padding-bottom: 8px;
+}
+
+.control-actions {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.control-btn {
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    font-size:14px;
+}
+
+.btn-block {
+    background:#ff5252;
+    color:white;
+}
+.btn-block:hover {
+    background:#d32f2f;
+    transform: translateY(-2px);
+}
+.btn-unblock {
+    background:#4caf50;
+    color:white;
+}
+.btn-unblock:hover {
+    background:#388e3c;
+    transform: translateY(-2px);
+}
+.btn-vip {
+    background:#ff9800;
+    color:white;
+}
+.btn-vip:hover {
+    background:#f57c00;
+    transform: translateY(-2px);
+}
+.btn-normal {
+    background:#9e9e9e;
+    color:white;
+}
+.btn-normal:hover {
+    background:#757575;
+    transform: translateY(-2px);
+}
+
+/* ফর্ম এলিমেন্ট */
+.form-group {
+    margin-bottom:15px;
+}
+.form-group label {
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+    color:#555;
+    font-size:14px;
+}
+.form-control {
+    width:100%;
+    padding:12px 15px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:14px;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.8);
+}
+.form-control:focus {
+    border-color: #ff66b2;
+    box-shadow: 0 0 10px rgba(255,102,178,0.3);
+    transform: scale(1.02);
+}
+textarea.form-control {
+    min-height:100px;
+    resize:vertical;
+}
+.service-controls {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+    gap:12px;
+}
+.service-item {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    background:white;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:14px;
+    transition: all 0.3s ease;
+}
+.service-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 12px rgba(255,102,178,0.2);
+}
+.service-item input[type="checkbox"] {
+    width:18px;
+    height:18px;
+    accent-color: #ff66b2;
+}
+
+/* অ্যালার্ট */
+.alert {
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-weight:600;
+    font-size:14px;
+}
+.alert-success {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    color: #2e7d32;
+    border:2px solid #4caf50;
+}
+.alert-error {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    color: #c62828;
+    border:2px solid #f44336;
+}
+
+/* লোডার */
+.loader {
+    text-align:center;
+    padding:20px;
+    color:#666;
+    font-size:16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255,102,178,0.3);
+    border-top: 5px solid #ff66b2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* সার্চ বার */
+.search-container {
+    margin-bottom:25px;
+    position: relative;
+}
+.search-box {
+    width:100%;
+    padding:15px 20px;
+    border-radius:15px;
+    border:2px solid rgba(255,102,178,0.3);
+    font-size:16px;
+    background: rgba(255,255,255,0.9);
+    transition: all 0.3s ease;
+}
+.search-box:focus {
+    border-color: #ff66b2;
+    box-shadow: 0 5px 20px rgba(255,102,178,0.4);
+    transform: translateY(-2px);
+}
+
+/* কোয়িক অ্যাকশন বাটন */
+.quick-actions {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:15px;
+    margin-bottom:25px;
+}
+.quick-action-btn {
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    font-size:16px;
+    background: linear-gradient(135deg, #ff66b2, #cc33ff);
+    color:white;
+}
+.quick-action-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(204,51,255,0.6);
+}
+
+/* ইউজার ইনফো কার্ড */
+.user-info-card {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    grid-column: 1 / -1;
+}
+.user-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+.user-info-label {
+    font-weight: 600;
+}
+.user-info-value {
+    font-weight: normal;
+}
+
+/* প্রোগ্রেস বার */
+.progress-container {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    margin: 12px 0;
+    height: 12px;
+    overflow: hidden;
+}
+.progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ff66b2, #cc33ff);
+    transition: width 0.5s ease;
+}
+
+/* রেস্পন্সিভ */
+@media (max-width: 1200px) {
+    .control-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .users-grid {
+        grid-template-columns:1fr;
+    }
+    .control-actions {
+        grid-template-columns:1fr;
+    }
+    .status-bar {
+        flex-direction:column;
+        gap:12px;
+    }
+    .quick-actions {
+        grid-template-columns:1fr;
+    }
+    .service-controls {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ড্যাশবোর্ড স্টাইল */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: rgba(255,255,255,0.9);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,102,178,0.3);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(255,102,178,0.3);
+}
+
+.stat-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ff66b2;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ট্যাব সিস্টেম */
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    background: rgba(255,102,178,0.8);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* কাস্টম স্ক্রলবার */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #ff66b2, #cc33ff);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #cc33ff, #ff66b2);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1><i class="fas fa-crown"></i> MR_TOOLS এডমিন প্যানেল - গড মোড</h1>
+    <p>সকল ইউজার ম্যানেজমেন্ট এবং সিস্টেম কন্ট্রোল</p>
+</div>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-number" id="totalUsers">0</div>
+        <div class="stat-label">মোট ইউজার</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-number" id="activeUsers">0</div>
+        <div class="stat-label">অ্যাক্টিভ ইউজার</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">❌</div>
+        <div class="stat-number" id="blockedUsers">0</div>
+        <div class="stat-label">ব্লকড ইউজার</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-number" id="vipUsers">0</div>
+        <div class="stat-label">ভিআইপি ইউজার</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-number" id="totalOrders">0</div>
+        <div class="stat-label">মোট অর্ডার</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">🔄</div>
+        <div class="stat-number" id="todayOrders">0</div>
+        <div class="stat-label">আজকের অর্ডার</div>
+    </div>
+</div>
+
+<div class="tabs">
+    <button class="tab active" data-tab="users-tab">👥 ইউজার ম্যানেজমেন্ট</button>
+    <button class="tab" data-tab="system-tab">⚙️ সিস্টেম কন্ট্রোল</button>
+</div>
+
+<div class="tab-content active" id="users-tab">
+    <div class="search-container">
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 ইউজার আইডি দিয়ে সার্চ করুন...">
+    </div>
+
+    <div class="quick-actions">
+        <button class="quick-action-btn" id="bulkMessageBtn">
+            <i class="fas fa-broadcast-tower"></i> বাল্ক মেসেজ
+        </button>
+        <button class="quick-action-btn" id="enableMaintenanceBtn">
+            <i class="fas fa-tools"></i> মেইন্টেন্যান্স চালু করুন
+        </button>
+        <button class="quick-action-btn" id="disableMaintenanceBtn">
+            <i class="fas fa-check-circle"></i> মেইন্টেন্যান্স বন্ধ করুন
+        </button>
+    </div>
+
+    <div id="alertContainer"></div>
+
+    <div class="users-grid" id="usersGrid">
+        <div class="loader">
+            <div class="spinner"></div>
+            <div>ইউজার লোড হচ্ছে...</div>
+        </div>
+    </div>
+</div>
+
+<div class="tab-content" id="system-tab">
+    <div class="control-section">
+        <h3><i class="fas fa-sliders-h"></i> সিস্টেম সেটিংস</h3>
+        <div class="form-group">
+            <label for="systemCooldown">ডিফল্ট কুলডাউন সময় (মিনিট):</label>
+            <input type="number" id="systemCooldown" class="form-control" min="1" max="60" value="10">
+        </div>
+        <button class="controls-btn" id="updateSystemSettingsBtn" style="background:#2196f3; color:white; width:100%;">
+            <i class="fas fa-save"></i> সিস্টেম সেটিংস আপডেট করুন
+        </button>
+    </div>
+
+    <div class="control-section">
+        <h3><i class="fas fa-database"></i> ডাটা ম্যানেজমেন্ট</h3>
+        <div class="control-actions">
+            <button class="control-btn" id="backupDataBtn" style="background:#4caf50; color:white;">
+                <i class="fas fa-download"></i> ডাটা ব্যাকআপ
+            </button>
+            <button class="control-btn" id="exportDataBtn" style="background:#ff9800; color:white;">
+                <i class="fas fa-file-export"></i> ডাটা এক্সপোর্ট
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- কন্ট্রোল রুম -->
+<div class="control-room" id="controlRoom" style="display:none;">
+    <div class="control-content">
+        <div class="control-header">
+            <h2><i class="fas fa-gamepad"></i> ইউজার কন্ট্রোল রুম - <span id="controlUserId"></span></h2>
+            <button class="close-btn" id="closeControlRoom">✕</button>
+        </div>
+        <div class="control-body">
+            
+            <div class="user-info-card">
+                <div class="user-info-row">
+                    <span class="user-info-label"><i class="fas fa-id-card"></i> ইউজার আইডি:</span>
+                    <span class="user-info-value" id="infoUserId"></span>
+                </div>
+                <div class="user-info-row">
+                    <span class="user-info-label"><i class="fas fa-shopping-cart"></i> মোট অর্ডার:</span>
+                    <span class="user-info-value" id="infoTotalOrders">0</span>
+                </div>
+                <div class="user-info-row">
+                    <span class="user-info-label"><i class="fas fa-link"></i> বর্তমান অর্ডার:</span>
+                    <span class="user-info-value" id="infoCurrentOrders">0/5</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="orderProgressBar" style="width: 0%"></div>
+                </div>
+                <div class="user-info-row">
+                    <span class="user-info-label"><i class="fas fa-crown"></i> ভিআইপি ব্যবহার:</span>
+                    <span class="user-info-value" id="infoVipUsage">0/0</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="vipProgressBar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3><i class="fas fa-user-lock"></i> ইউজার স্ট্যাটাস কন্ট্রোল</h3>
+                <div class="control-actions">
+                    <button class="control-btn btn-block" id="blockUserBtn">
+                        <i class="fas fa-ban"></i> স্থায়ী ব্লক করুন
+                    </button>
+                    <button class="control-btn btn-unblock" id="unblockUserBtn">
+                        <i class="fas fa-check-circle"></i> আনব্লক করুন
+                    </button>
+                    <button class="control-btn btn-vip" id="makeVipBtn">
+                        <i class="fas fa-crown"></i> ভিআইপি বানান
+                    </button>
+                    <button class="control-btn btn-normal" id="removeVipBtn">
+                        <i class="fas fa-user"></i> নরমাল বানান
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3><i class="fas fa-clock"></i> টাইম ব্লক কন্ট্রোল</h3>
+                <div class="form-group">
+                    <label for="timeBlockDuration">ব্লক সময় নির্বাচন করুন:</label>
+                    <select id="timeBlockDuration" class="form-control">
+                        <option value="30">৩০ মিনিট</option>
+                        <option value="60">১ ঘন্টা</option>
+                        <option value="120">২ ঘন্টা</option>
+                        <option value="240">৪ ঘন্টা</option>
+                        <option value="720">১২ ঘন্টা</option>
+                        <option value="1440">২৪ ঘন্টা</option>
+                    </select>
+                </div>
+                <div class="control-actions">
+                    <button class="control-btn" id="timeBlockBtn" style="background:#ff9800; color:white;">
+                        <i class="fas fa-clock"></i> টাইম ব্লক করুন
+                    </button>
+                    <button class="control-btn" id="removeTimeBlockBtn" style="background:#4caf50; color:white;">
+                        <i class="fas fa-unlock"></i> টাইম ব্লক সরান
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3><i class="fas fa-crown"></i> ভিআইপি সার্ভিস কন্ট্রোল</h3>
+                <div class="form-group">
+                    <label for="vipServiceLimit">ভিআইপি সার্ভিস লিমিট (মোট ব্যবহার সংখ্যা):</label>
+                    <input type="number" id="vipServiceLimit" class="form-control" min="0" max="100" value="2">
+                </div>
+                <div class="form-group">
+                    <label for="resetVipUsage">ভিআইপি ব্যবহার রিসেট করুন:</label>
+                    <button class="controls-btn" id="resetVipUsageBtn" style="background:#9c27b0; color:white; width:100%;">
+                        <i class="fas fa-redo"></i> ভিআইপি ব্যবহার রিসেট করুন
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3><i class="fas fa-envelope"></i> এডমিন মেসেজ</h3>
+                <div class="form-group">
+                    <label for="adminMessage">ইউজারকে মেসেজ লিখুন:</label>
+                    <textarea id="adminMessage" class="form-control" placeholder="ইউজারকে মেসেজ লিখুন..."></textarea>
+                </div>
+                <button class="controls-btn" id="sendMessageBtn" style="background:#9c27b0; color:white; width:100%;">
+                    <i class="fas fa-paper-plane"></i> মেসেজ পাঠান
+                </button>
+            </div>
+
+            <div class="control-section">
+                <h3><i class="fas fa-cogs"></i> সার্ভিস কন্ট্রোল</h3>
+                <div class="service-controls" id="serviceControls">
+                    <!-- সার্ভিস কন্ট্রোল জাভাস্ক্রিপ্ট দ্বারা যোগ হবে -->
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3><i class="fas fa-stopwatch"></i> কুলডাউন সেটিংস</h3>
+                <div class="form-group">
+                    <label for="cooldownTime">কুলডাউন সময় (মিনিট):</label>
+                    <input type="number" id="cooldownTime" class="form-control" min="1" max="60" value="10">
+                </div>
+                <button class="controls-btn" id="updateCooldownBtn" style="background:#2196f3; color:white; width:100%;">
+                    <i class="fas fa-sync"></i> কুলডাউন আপডেট করুন
+                </button>
+            </div>
+
+            <div class="control-section">
+                <h3><i class="fas fa-sort-amount-up"></i> পরিমাণ সেটিংস</h3>
+                <div class="form-group">
+                    <label for="likesAmount">লাইক পরিমাণ:</label>
+                    <input type="number" id="likesAmount" class="form-control" min="1" max="1000" value="100">
+                </div>
+                <div class="form-group">
+                    <label for="viewsAmount">ভিউ পরিমাণ:</label>
+                    <input type="number" id="viewsAmount" class="form-control" min="1" max="5000" value="500">
+                </div>
+                <div class="form-group">
+                    <label for="followersAmount">ফলোয়ার পরিমাণ:</label>
+                    <input type="number" id="followersAmount" class="form-control" min="1" max="100" value="50">
+                </div>
+                <div class="form-group">
+                    <label for="commentsAmount">কমেন্ট পরিমাণ:</label>
+                    <input type="number" id="commentsAmount" class="form-control" min="10" max="100" value="50">
+                </div>
+                <div class="form-group">
+                    <label for="sharesAmount">শেয়ার পরিমাণ:</label>
+                    <input type="number" id="sharesAmount" class="form-control" min="1" max="100" value="50">
+                </div>
+                <button class="controls-btn" id="updateAmountsBtn" style="background:#ff9800; color:white; width:100%;">
+                    <i class="fas fa-edit"></i> পরিমাণ আপডেট করুন
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- বাল্ক মেসেজ মডাল -->
+<div class="control-room" id="bulkMessageModal" style="display:none;">
+    <div class="control-content" style="max-width:600px;">
+        <div class="control-header">
+            <h2><i class="fas fa-broadcast-tower"></i> বাল্ক মেসেজ</h2>
+            <button class="close-btn" id="closeBulkMessageModal">✕</button>
+        </div>
+        <div class="control-body">
+            <div class="form-group">
+                <label for="bulkMessageTarget">টার্গেট ইউজার:</label>
+                <select id="bulkMessageTarget" class="form-control">
+                    <option value="all">সকল ইউজার</option>
+                    <option value="active">শুধুমাত্র অ্যাক্টিভ ইউজার</option>
+                    <option value="blocked">শুধুমাত্র ব্লকড ইউজার</option>
+                    <option value="vip">শুধুমাত্র ভিআইপি ইউজার</option>
+                    <option value="non-vip">শুধুমাত্র নন-ভিআইপি ইউজার</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bulkMessage">মেসেজ:</label>
+                <textarea id="bulkMessage" class="form-control" placeholder="ইউজারদের মেসেজ লিখুন..."></textarea>
+            </div>
+            <button class="controls-btn" id="sendBulkMessageBtn" style="background:#9c27b0; color:white; width:100%;">
+                <i class="fas fa-paper-plane"></i> বাল্ক মেসেজ পাঠান
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+// Firebase কনফিগারেশন
+const firebaseConfig = {
+    apiKey: "AIzaSyCCGGU1Tvy3HMd0bCi8X3R7Gda5ZtSCcXE",
+    authDomain: "user-panel-e7fb6.firebaseapp.com",
+    databaseURL: "https://user-panel-e7fb6-default-rtdb.firebaseio.com",
+    projectId: "user-panel-e7fb6",
+    storageBucket: "user-panel-e7fb6.firebasestorage.app",
+    messagingSenderId: "106974609939",
+    appId: "1:106974609939:web:32542001892c4242c6f5e6",
+    measurementId: "G-Y15T2HBY2J"
+};
+
+// Firebase ইনিশিয়ালাইজ করুন
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// গ্লোবাল ভেরিয়েবল
+let allUsers = {};
+let currentControlUserId = '';
+
+// DOM এলিমেন্ট
+const usersGrid = document.getElementById("usersGrid");
+const totalUsers = document.getElementById("totalUsers");
+const activeUsers = document.getElementById("activeUsers");
+const blockedUsers = document.getElementById("blockedUsers");
+const vipUsers = document.getElementById("vipUsers");
+const totalOrders = document.getElementById("totalOrders");
+const todayOrders = document.getElementById("todayOrders");
+const controlRoom = document.getElementById("controlRoom");
+const closeControlRoom = document.getElementById("closeControlRoom");
+const controlUserId = document.getElementById("controlUserId");
+const alertContainer = document.getElementById("alertContainer");
+const searchBox = document.getElementById("searchBox");
+const bulkMessageModal = document.getElementById("bulkMessageModal");
+const closeBulkMessageModal = document.getElementById("closeBulkMessageModal");
+
+// ইউজার ইনফো এলিমেন্ট
+const infoUserId = document.getElementById("infoUserId");
+const infoTotalOrders = document.getElementById("infoTotalOrders");
+const infoCurrentOrders = document.getElementById("infoCurrentOrders");
+const infoVipUsage = document.getElementById("infoVipUsage");
+const orderProgressBar = document.getElementById("orderProgressBar");
+const vipProgressBar = document.getElementById("vipProgressBar");
+
+// ট্যাব সিস্টেম
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        // সব ট্যাব থেকে active ক্লাস সরান
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        // বর্তমান ট্যাবে active ক্লাস যোগ করুন
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+    });
+});
+
+// ইউজার লোড করুন
+function loadUsers() {
+    const usersRef = database.ref('users');
+    
+    usersRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            allUsers = data;
+            displayUsers(data);
+            updateStats(data);
+            updateDashboard(data);
+        } else {
+            usersGrid.innerHTML = '<div class="loader">❌ কোন ইউজার পাওয়া যায়নি</div>';
+        }
+    });
+}
+
+// ইউজার ডিসপ্লে করুন
+function displayUsers(users) {
+    usersGrid.innerHTML = '';
+    
+    const searchTerm = searchBox.value.toLowerCase();
+    
+    Object.keys(users).forEach(userId => {
+        const user = users[userId];
+        
+        // সার্চ ফিল্টার প্রয়োগ করুন
+        if (searchTerm && !userId.includes(searchTerm)) {
+            return;
+        }
+        
+        const userCard = document.createElement('div');
+        userCard.className = 'user-card';
+        
+        // ইউজার স্ট্যাটাস নির্ধারণ করুন
+        let statusClass = 'status-active';
+        let statusText = '✅ অ্যাক্টিভ';
+        
+        if (user.isBlocked) {
+            statusClass = 'status-blocked';
+            statusText = '❌ ব্লকড';
+        } else if (user.timeBlockedUntil) {
+            const blockedUntil = new Date(user.timeBlockedUntil);
+            const now = new Date();
+            if (blockedUntil > now) {
+                statusClass = 'status-time-blocked';
+                statusText = '⏰ টাইম ব্লকড';
+            } else if (user.isVip) {
+                statusClass = 'status-vip';
+                statusText = '⭐ ভিআইপি';
+            }
+        } else if (user.isVip) {
+            statusClass = 'status-vip';
+            statusText = '⭐ ভিআইপি';
+        }
+        
+        userCard.innerHTML = `
+            <div class="user-id">
+                <span>🆔 ${userId}</span>
+                <button class="controls-btn" data-userid="${userId}">
+                    <i class="fas fa-cog"></i> কন্ট্রোল
+                </button>
+            </div>
+            <div class="user-stats">
+                <div class="stat">
+                    মোট অর্ডার <div class="stat-value">${user.totalOrders || 0}</div>
+                </div>
+                <div class="stat">
+                    বর্তমান অর্ডার <div class="stat-value">${user.currentOrders || 0}/5</div>
+                </div>
+            </div>
+            <div class="user-status ${statusClass}">
+                ${statusText}
+            </div>
+        `;
+        
+        usersGrid.appendChild(userCard);
+    });
+    
+    // কন্ট্রোল বাটনে ইভেন্ট যোগ করুন
+    document.querySelectorAll('.controls-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const userId = this.getAttribute('data-userid');
+            openControlRoom(userId);
+        });
+    });
+}
+
+// স্ট্যাটাস আপডেট করুন
+function updateStats(users) {
+    const userList = Object.values(users);
+    totalUsers.textContent = userList.length;
+    activeUsers.textContent = userList.filter(user => !user.isBlocked && (!user.timeBlockedUntil || new Date(user.timeBlockedUntil) <= new Date())).length;
+    blockedUsers.textContent = userList.filter(user => user.isBlocked || (user.timeBlockedUntil && new Date(user.timeBlockedUntil) > new Date())).length;
+    vipUsers.textContent = userList.filter(user => user.isVip).length;
+}
+
+// ড্যাশবোর্ড আপডেট করুন
+function updateDashboard(users) {
+    const userList = Object.values(users);
+    const totalOrdersCount = userList.reduce((sum, user) => sum + (user.totalOrders || 0), 0);
+    const today = new Date().toDateString();
+    const todayOrdersCount = userList.reduce((sum, user) => {
+        if (user.lastOrderTime && new Date(user.lastOrderTime).toDateString() === today) {
+            return sum + 1;
+        }
+        return sum;
+    }, 0);
+    
+    totalOrders.textContent = totalOrdersCount;
+    todayOrders.textContent = todayOrdersCount;
+}
+
+// কন্ট্রোল রুম খুলুন
+function openControlRoom(userId) {
+    currentControlUserId = userId;
+    controlUserId.textContent = userId;
+    
+    const user = allUsers[userId];
+    
+    // ইউজার ইনফো আপডেট করুন
+    updateUserInfo(user);
+    
+    // ইউজার ডাটা দিয়ে ফর্ম পূরণ করুন
+    document.getElementById('cooldownTime').value = user.cooldownTime || 10;
+    document.getElementById('likesAmount').value = user.customAmounts?.likes || 100;
+    document.getElementById('viewsAmount').value = user.customAmounts?.views || 500;
+    document.getElementById('followersAmount').value = user.customAmounts?.followers || 50;
+    document.getElementById('commentsAmount').value = user.customAmounts?.comments || 50;
+    document.getElementById('sharesAmount').value = user.customAmounts?.shares || 50;
+    document.getElementById('vipServiceLimit').value = user.vipServiceLimit || 2;
+    document.getElementById('adminMessage').value = '';
+    
+    // সার্ভিস কন্ট্রোল তৈরি করুন
+    setupServiceControls(user);
+    
+    // ব্লক/আনব্লক বাটন স্ট্যাটাস
+    document.getElementById('blockUserBtn').style.display = user.isBlocked ? 'none' : 'flex';
+    document.getElementById('unblockUserBtn').style.display = user.isBlocked ? 'flex' : 'none';
+    
+    // ভিআইপি বাটন স্ট্যাটাস
+    document.getElementById('makeVipBtn').style.display = user.isVip ? 'none' : 'flex';
+    document.getElementById('removeVipBtn').style.display = user.isVip ? 'flex' : 'none';
+    
+    // টাইম ব্লক বাটন স্ট্যাটাস
+    const isTimeBlocked = user.timeBlockedUntil && new Date(user.timeBlockedUntil) > new Date();
+    document.getElementById('timeBlockBtn').style.display = isTimeBlocked ? 'none' : 'flex';
+    document.getElementById('removeTimeBlockBtn').style.display = isTimeBlocked ? 'flex' : 'none';
+    
+    controlRoom.style.display = 'flex';
+}
+
+// ইউজার ইনফো আপডেট করুন
+function updateUserInfo(user) {
+    infoUserId.textContent = user.id;
+    infoTotalOrders.textContent = user.totalOrders || 0;
+    infoCurrentOrders.textContent = `${user.currentOrders || 0}/5`;
+    
+    // অর্ডার প্রোগ্রেস বার
+    const orderProgress = ((user.currentOrders || 0) / 5) * 100;
+    orderProgressBar.style.width = `${orderProgress}%`;
+    
+    // ভিআইপি ব্যবহার ইনফো
+    const vipUsed = user.vipServiceUsed || 0;
+    const vipLimit = user.vipServiceLimit || 2;
+    infoVipUsage.textContent = `${vipUsed}/${vipLimit}`;
+    
+    // ভিআইপি প্রোগ্রেস বার
+    const vipProgress = vipLimit > 0 ? (vipUsed / vipLimit) * 100 : 0;
+    vipProgressBar.style.width = `${vipProgress}%`;
+}
+
+// সার্ভিস কন্ট্রোল সেটআপ করুন
+function setupServiceControls(user) {
+    const serviceControls = document.getElementById('serviceControls');
+    serviceControls.innerHTML = '';
+    
+    const services = [
+        { id: 'likes', name: 'লাইক', emoji: '👍' },
+        { id: 'views', name: 'ভিউ', emoji: '👀' },
+        { id: 'followers', name: 'ফলোয়ার', emoji: '👥' },
+        { id: 'comments', name: 'কমেন্ট', emoji: '💬' },
+        { id: 'shares', name: 'শেয়ার', emoji: '🔄' }
+    ];
+    
+    services.forEach(service => {
+        const isEnabled = user.services?.[service.id] !== false;
+        
+        const serviceItem = document.createElement('div');
+        serviceItem.className = 'service-item';
+        serviceItem.innerHTML = `
+            <input type="checkbox" id="service-${service.id}" ${isEnabled ? 'checked' : ''}>
+            <label for="service-${service.id}">${service.emoji} ${service.name}</label>
+        `;
+        
+        serviceControls.appendChild(serviceItem);
+    });
+}
+
+// অ্যালার্ট দেখান
+function showAlert(message, type) {
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+    alert.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i> ${message}`;
+    
+    alertContainer.appendChild(alert);
+    
+    // 5 সেকেন্ড পর অ্যালার্ট সরান
+    setTimeout(() => {
+        alert.remove();
+    }, 5000);
+}
+
+// ইভেন্ট লিসেনার
+closeControlRoom.addEventListener('click', () => {
+    controlRoom.style.display = 'none';
+});
+
+closeBulkMessageModal.addEventListener('click', () => {
+    bulkMessageModal.style.display = 'none';
+});
+
+// সার্চ ফাংশনালিটি
+searchBox.addEventListener('input', () => {
+    displayUsers(allUsers);
+});
+
+// বাল্ক মেসেজ মডাল খুলুন
+document.getElementById('bulkMessageBtn').addEventListener('click', () => {
+    bulkMessageModal.style.display = 'flex';
+});
+
+// বাল্ক মেসেজ পাঠান
+document.getElementById('sendBulkMessageBtn').addEventListener('click', () => {
+    const message = document.getElementById('bulkMessage').value.trim();
+    const target = document.getElementById('bulkMessageTarget').value;
+    
+    if (!message) {
+        showAlert('❌ বাল্ক মেসেজ লিখুন', 'error');
+        return;
+    }
+    
+    let count = 0;
+    Object.keys(allUsers).forEach(userId => {
+        const user = allUsers[userId];
+        
+        let shouldSend = false;
+        if (target === 'all') shouldSend = true;
+        else if (target === 'active') shouldSend = !user.isBlocked && (!user.timeBlockedUntil || new Date(user.timeBlockedUntil) <= new Date());
+        else if (target === 'blocked') shouldSend = user.isBlocked || (user.timeBlockedUntil && new Date(user.timeBlockedUntil) > new Date());
+        else if (target === 'vip') shouldSend = user.isVip;
+        else if (target === 'non-vip') shouldSend = !user.isVip;
+        
+        if (shouldSend) {
+            database.ref('users/' + userId).update({
+                adminMessage: message
+            });
+            count++;
+        }
+    });
+    
+    showAlert(`📨 ${count} জন ইউজারকে বাল্ক মেসেজ পাঠানো হয়েছে`, 'success');
+    document.getElementById('bulkMessage').value = '';
+    bulkMessageModal.style.display = 'none';
+});
+
+// ইউজার ব্লক করুন
+document.getElementById('blockUserBtn').addEventListener('click', () => {
+    database.ref('users/' + currentControlUserId).update({
+        isBlocked: true,
+        timeBlockedUntil: null
+    });
+    showAlert(`✅ ইউজার ${currentControlUserId} ব্লক করা হয়েছে`, 'success');
+    controlRoom.style.display = 'none';
+});
+
+// ইউজার আনব্লক করুন
+document.getElementById('unblockUserBtn').addEventListener('click', () => {
+    database.ref('users/' + currentControlUserId).update({
+        isBlocked: false,
+        timeBlockedUntil: null
+    });
+    showAlert(`✅ ইউজার ${currentControlUserId} আনব্লক করা হয়েছে`, 'success');
+    controlRoom.style.display = 'none';
+});
+
+// ভিআইপি বানান
+document.getElementById('makeVipBtn').addEventListener('click', () => {
+    database.ref('users/' + currentControlUserId).update({
+        isVip: true
+    });
+    showAlert(`⭐ ইউজার ${currentControlUserId} ভিআইপি বানানো হয়েছে`, 'success');
+    controlRoom.style.display = 'none';
+});
+
+// নরমাল বানান
+document.getElementById('removeVipBtn').addEventListener('click', () => {
+    database.ref('users/' + currentControlUserId).update({
+        isVip: false
+    });
+    showAlert(`👤 ইউজার ${currentControlUserId} নরমাল বানানো হয়েছে`, 'success');
+    controlRoom.style.display = 'none';
+});
+
+// টাইম ব্লক করুন
+document.getElementById('timeBlockBtn').addEventListener('click', () => {
+    const minutes = parseInt(document.getElementById('timeBlockDuration').value);
+    const blockedUntil = new Date(Date.now() + minutes * 60000).toISOString();
+    
+    database.ref('users/' + currentControlUserId).update({
+        timeBlockedUntil: blockedUntil,
+        isBlocked: false
+    });
+    
+    showAlert(`⏰ ইউজার ${currentControlUserId} কে ${minutes} মিনিটের জন্য ব্লক করা হয়েছে`, 'success');
+    controlRoom.style.display = 'none';
+});
+
+// টাইম ব্লক সরান
+document.getElementById('removeTimeBlockBtn').addEventListener('click', () => {
+    database.ref('users/' + currentControlUserId).update({
+        timeBlockedUntil: null
+    });
+    
+    showAlert(`✅ ইউজার ${currentControlUserId} এর টাইম ব্লক সরানো হয়েছে`, 'success');
+    controlRoom.style.display = 'none';
+});
+
+// ভিআইপি সার্ভিস লিমিট আপডেট করুন
+document.getElementById('vipServiceLimit').addEventListener('change', function() {
+    const limit = parseInt(this.value);
+    if (limit >= 0) {
+        database.ref('users/' + currentControlUserId).update({
+            vipServiceLimit: limit
+        });
+        showAlert(`⭐ ইউজার ${currentControlUserId} এর ভিআইপি লিমিট ${limit} করা হয়েছে`, 'success');
+    }
+});
+
+// ভিআইপি ব্যবহার রিসেট করুন
+document.getElementById('resetVipUsageBtn').addEventListener('click', () => {
+    database.ref('users/' + currentControlUserId).update({
+        vipServiceUsed: 0
+    });
+    
+    showAlert(`🔄 ইউজার ${currentControlUserId} এর ভিআইপি ব্যবহার রিসেট করা হয়েছে`, 'success');
+});
+
+// মেসেজ পাঠান
+document.getElementById('sendMessageBtn').addEventListener('click', () => {
+    const message = document.getElementById('adminMessage').value.trim();
+    
+    if (!message) {
+        showAlert('❌ মেসেজ লিখুন', 'error');
+        return;
+    }
+    
+    database.ref('users/' + currentControlUserId).update({
+        adminMessage: message
+    });
+    
+    showAlert(`📨 ইউজার ${currentControlUserId} কে মেসেজ পাঠানো হয়েছে`, 'success');
+    document.getElementById('adminMessage').value = '';
+});
+
+// কুলডাউন আপডেট করুন
+document.getElementById('updateCooldownBtn').addEventListener('click', () => {
+    const cooldownTime = parseInt(document.getElementById('cooldownTime').value);
+    
+    if (cooldownTime < 1 || cooldownTime > 60) {
+        showAlert('❌ কুলডাউন সময় 1-60 মিনিটের মধ্যে হতে হবে', 'error');
+        return;
+    }
+    
+    database.ref('users/' + currentControlUserId).update({
+        cooldownTime: cooldownTime
+    });
+    
+    showAlert(`⏰ ইউজার ${currentControlUserId} এর কুলডাউন ${cooldownTime} মিনিট সেট করা হয়েছে`, 'success');
+});
+
+// পরিমাণ আপডেট করুন
+document.getElementById('updateAmountsBtn').addEventListener('click', () => {
+    const likesAmount = parseInt(document.getElementById('likesAmount').value);
+    const viewsAmount = parseInt(document.getElementById('viewsAmount').value);
+    const followersAmount = parseInt(document.getElementById('followersAmount').value);
+    const commentsAmount = parseInt(document.getElementById('commentsAmount').value);
+    const sharesAmount = parseInt(document.getElementById('sharesAmount').value);
+    
+    if (likesAmount < 1 || likesAmount > 1000) {
+        showAlert('❌ লাইক পরিমাণ 1-1000 এর মধ্যে হতে হবে', 'error');
+        return;
+    }
+    
+    if (viewsAmount < 1 || viewsAmount > 5000) {
+        showAlert('❌ ভিউ পরিমাণ 1-5000 এর মধ্যে হতে হবে', 'error');
+        return;
+    }
+    
+    if (followersAmount < 1 || followersAmount > 100) {
+        showAlert('❌ ফলোয়ার পরিমাণ 1-100 এর মধ্যে হতে হবে', 'error');
+        return;
+    }
+    
+    if (commentsAmount < 10 || commentsAmount > 100) {
+        showAlert('❌ কমেন্ট পরিমাণ 10-100 এর মধ্যে হতে হবে', 'error');
+        return;
+    }
+    
+    if (sharesAmount < 1 || sharesAmount > 100) {
+        showAlert('❌ শেয়ার পরিমাণ 1-100 এর মধ্যে হতে হবে', 'error');
+        return;
+    }
+    
+    database.ref('users/' + currentControlUserId + '/customAmounts').update({
+        likes: likesAmount,
+        views: viewsAmount,
+        followers: followersAmount,
+        comments: commentsAmount,
+        shares: sharesAmount
+    });
+    
+    showAlert(`🔢 ইউজার ${currentControlUserId} এর পরিমাণ আপডেট করা হয়েছে`, 'success');
+});
+
+// সার্ভিস আপডেট করুন
+controlRoom.addEventListener('click', (e) => {
+    if (e.target.type === 'checkbox' && e.target.id.startsWith('service-')) {
+        const serviceId = e.target.id.replace('service-', '');
+        const isEnabled = e.target.checked;
+        
+        database.ref('users/' + currentControlUserId + '/services').update({
+            [serviceId]: isEnabled
+        });
+        
+        const serviceName = {
+            likes: 'লাইক',
+            views: 'ভিউ',
+            followers: 'ফলোয়ার',
+            comments: 'কমেন্ট',
+            shares: 'শেয়ার'
+        }[serviceId];
+        
+        showAlert(`⚙️ ${serviceName} সার্ভিস ${isEnabled ? 'চালু' : 'বন্ধ'} করা হয়েছে`, 'success');
+    }
+});
+
+// মেইন্টেন্যান্স মোড চালু করুন
+document.getElementById('enableMaintenanceBtn').addEventListener('click', () => {
+    database.ref('siteStatus/maintenance').update({
+        enabled: true
+    });
+    
+    showAlert('🔧 মেইন্টেন্যান্স মোড চালু করা হয়েছে', 'success');
+});
+
+// মেইন্টেন্যান্স মোড বন্ধ করুন
+document.getElementById('disableMaintenanceBtn').addEventListener('click', () => {
+    database.ref('siteStatus/maintenance').update({
+        enabled: false
+    });
+    
+    showAlert('✅ মেইন্টেন্যান্স মোড বন্ধ করা হয়েছে', 'success');
+});
+
+// সিস্টেম সেটিংস আপডেট করুন
+document.getElementById('updateSystemSettingsBtn').addEventListener('click', () => {
+    const systemCooldown = parseInt(document.getElementById('systemCooldown').value);
+    
+    if (systemCooldown < 1 || systemCooldown > 60) {
+        showAlert('❌ সিস্টেম কুলডাউন সময় 1-60 মিনিটের মধ্যে হতে হবে', 'error');
+        return;
+    }
+    
+    // সকল ইউজারের জন্য সিস্টেম সেটিংস আপডেট করুন
+    let count = 0;
+    Object.keys(allUsers).forEach(userId => {
+        database.ref('users/' + userId).update({
+            cooldownTime: systemCooldown
+        });
+        count++;
+    });
+    
+    showAlert(`⚙️ ${count} জন ইউজারের সিস্টেম সেটিংস আপডেট করা হয়েছে`, 'success');
+});
+
+// ডাটা ব্যাকআপ
+document.getElementById('backupDataBtn').addEventListener('click', () => {
+    const dataStr = JSON.stringify(allUsers, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `mr_tools_backup_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    showAlert('💾 ডাটা ব্যাকআপ ডাউনলোড করা হয়েছে', 'success');
+});
+
+// ডাটা এক্সপোর্ট
+document.getElementById('exportDataBtn').addEventListener('click', () => {
+    const csvData = [];
+    
+    // হেডার যোগ করুন
+    csvData.push(['User ID', 'Total Orders', 'Current Orders', 'VIP', 'Blocked', 'Last Order'].join(','));
+    
+    // ডাটা যোগ করুন
+    Object.keys(allUsers).forEach(userId => {
+        const user = allUsers[userId];
+        csvData.push([
+            userId,
+            user.totalOrders || 0,
+            user.currentOrders || 0,
+            user.isVip ? 'Yes' : 'No',
+            user.isBlocked ? 'Yes' : 'No',
+            user.lastOrderTime || 'N/A'
+        ].join(','));
+    });
+    
+    const csvStr = csvData.join('\n');
+    const dataBlob = new Blob([csvStr], {type: 'text/csv'});
+    
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `mr_tools_users_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    showAlert('📊 ইউজার ডাটা CSV ফরম্যাটে এক্সপোর্ট করা হয়েছে', 'success');
+});
+
+// অ্যাপ্লিকেশন ইনিশিয়ালাইজ করুন
+loadUsers();
+</script>
+</body>
+  </html>
